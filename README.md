@@ -36,3 +36,9 @@ sudo apt update
 
 sudo apt install code 
 ```
+
+Open it with the command:
+
+```bash
+code
+```
