@@ -29,3 +29,6 @@ override.tf.json
 # example: *tfplan*
 
 .terraform.lock.hcl
+
+ssh-keys
+ssh-keys/*
