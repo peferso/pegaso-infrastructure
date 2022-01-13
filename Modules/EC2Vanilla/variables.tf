@@ -44,7 +44,7 @@ variable "pathToUD" {
 
 variable "publicIP" {
   description = "Whether the instance will have a public IP address automatically generated"
-  default     = false
+  default     = true
 }
 
 variable "keyName" {
