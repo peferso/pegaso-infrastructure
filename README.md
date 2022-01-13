@@ -24,3 +24,15 @@ Checking the installation
 ```bash
 terraform -help
 ```
+
+IDE for Terraform on Ubuntu (optional).
+
+Installing Visual Studio Code:
+
+```bash
+sudo apt install apt-transport-https
+
+sudo apt update
+
+sudo apt install code 
+```
