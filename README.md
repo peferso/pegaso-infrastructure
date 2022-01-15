@@ -43,6 +43,12 @@ Open it with the command:
 code
 ```
 
+Ansible installation on Ubuntu:
+
+```bash
+sudo apt-get install ansible
+```
+
 # Deployment
 
 Once in the repository folder, Terraform is started with:
@@ -113,6 +119,8 @@ export SSH_KEY_APPLCTN='key-pair-Linux-AMI-root'
 export SSH_KEY_DATABAS='key-pair-Linux-AMI-root'
 ...
 ```
+
+> Note that in order to ssh access to the EC2 instances you need to allow your public IP in ```Modules/SecurityGroups/variables.tf``` by setting the default value of ```adminIP``` variable.
 
 ### Update Ansible inventory with App and database hosts IPs
 

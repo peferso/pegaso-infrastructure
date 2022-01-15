@@ -1,7 +1,7 @@
 #!/bin/bash
 
-
-PLAYBOOKSDIR="../ansible-playbooks"
+MAINDIR=$PEGASO_INFRA_DIR
+PLAYBOOKSDIR=$MAINDIR"/Utilities/ansible-playbooks"
 DBSETUP="db-server-setup.yml"
 DBANSCONFIGFILE="db-server-setup.cfg"
 CFGVAR="ANSIBLE_CONFIG"
@@ -36,7 +36,7 @@ run_ansible_playbook() {
   # ========================================================
   "
   echo "${MSSGPLBK}"
-  ansible-playbook ${PLAYBOOKSDIR}/${1}
+  ansible-playbook -vvv ${PLAYBOOKSDIR}/${1}
 }
 
 # Main

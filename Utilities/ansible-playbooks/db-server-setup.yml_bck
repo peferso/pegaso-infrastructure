@@ -1,0 +1,123 @@
+---
+
+- name: configure database server
+  hosts: EC2Database
+  become: yes
+  remote_user: ec2-user
+  vars:
+#      ansible_python_interpreter: "/usr/bin/python3"
+      db_name: "db1"
+      db_user: "ec2-dbuser"
+      db_pass: "Perr0_Pat0"
+      db_uhst: "%"
+      mysqlinitpasswd: "tobeoverriden"
+      mysqlrootpasswd: "Perr0_Pat0"
+
+  tasks:
+
+  - name: Adding mySQL server repository
+    shell:
+      cmd: sudo rpm -Uvh https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
+    register: rpmmysql
+    failed_when:
+      - "'Error' in rpmmysql.stderr"
+
+  - name: Install mySQL server
+    shell:
+      cmd: sudo yum install mysql-community-server -y
+    register: installmysql
+    failed_when:
+      - "'Error' in installmysql.stderr"
+
+  - name: Enable the MySQL service to start at boot
+    systemd:
+      name: mysqld
+      enabled: yes
+
+  - name: Start the MySQL service
+    systemd:
+      name: mysqld
+      state: started
+
+  - name: Retrieve root initial password
+    shell:
+      cmd: sudo grep 'temporary password' /var/log/mysqld.log | awk '{print $NF}'
+    register: mysqlinitpasswd
+    become: root
+
+  - set_fact: Store initial root password in a variable
+     mysqlinitpasswd={{ mysqlinitpasswd.stdout }}
+
+  - name: Test of root login
+    shell:
+      cmd: mysql -e "" -uroot -p{{ mysqlrootpasswd }} 2>&1
+    register: rootLoginTest
+    ignore_errors: yes
+
+  - name: Set new password from temporary password
+    shell:
+      cmd: mysql -e "SET PASSWORD = '{{ mysqlrootpasswd }}';" --connect-expired-password -u'root' -p'{{ mysqlinitpasswd }}' 2>&1 #'
+    register: initRootPasswdChange
+    when: "'ERROR' in rootLoginTest.stdout"
+    failed_when: "'ERROR' in initRootPasswdChange.stdout"
+
+  - name: Create the database user
+    shell:
+      cmd: mysql -e "CREATE USER '{{ db_user }}'@'{{ db_uhst }}' IDENTIFIED BY '{{ db_pass }}';" -uroot -p{{ mysqlrootpasswd }}
+    register: databaseUserCreation
+    failed_when:
+      - "'ERROR' in databaseUserCreation.stdout"
+
+  - name: Grant privileges on everything to db user
+    shell:
+      cmd: mysql -e "GRANT ALL PRIVILEGES ON * . * TO '{{ db_user }}'@'{{ db_uhst }}';FLUSH PRIVILEGES;" -uroot -p{{ mysqlrootpasswd }}
+    register: grantPriv
+    failed_when:
+      - "'ERROR' in grantPriv.stdout"
+
+  - name: Alter authentication method to allow remote connection to user
+    shell:
+      cmd: mysql -e "ALTER USER '{{ db_user }}'@'{{ db_uhst }}' IDENTIFIED WITH mysql_native_password BY '{{ db_pass }}';" -uroot -p{{ mysqlrootpasswd }}
+    register: alterPass
+    failed_when:
+      - "'ERROR' in alterPass.stdout"
+
+  - name: Test whether bind-address parameter exists
+    shell:
+      cmd: sudo cat /etc/my.cnf | grep "bind-address"
+    register: bindaddressExists
+    failed_when:
+      - "'No such file or directory' in bindaddressExists.stdout"
+
+  - name: Print existence bind-address [I]
+    ansible.builtin.debug:
+      msg: "The parameter bind-address is not defined in /etc/my.cnf"
+    when: bindaddressExists.stdout == ""
+
+  - name: Print existence bind-address [II]
+    ansible.builtin.debug:
+      msg: "The parameter bind-address is already defined in /etc/my.cnf"
+    when: bindaddressExists.stdout != ""
+
+  - name: Add bind-address parameter to my.cnf to allow remote connections to the database
+    shell:
+      cmd: sudo echo "bind-address=0.0.0.0">> /etc/my.cnf
+    when: bindaddressExists.stdout.find('bind-address') == -1
+
+  - name: Restart the MySQL service
+    systemd:
+      name: mysqld
+      state: restarted
+
+  - name: Alter authentication method to allow remote connection to user
+    shell:
+      cmd: mysql -e "ALTER USER '{{ db_user }}'@'{{ db_uhst }}' IDENTIFIED WITH mysql_native_password BY '{{ db_pass }}';" -uroot -p{{ mysqlrootpasswd }}
+    register: alterPass
+    failed_when:
+      - '"ERROR" in alterPass.stdout'
+
+  - name: Restart the MySQL service
+    systemd:
+      name: mysqld
+      state: restarted
+
