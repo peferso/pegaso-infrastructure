@@ -1,3 +1,8 @@
+TODO:
+- Retrieve DBUSER and DBPASS from env. vars
+- Export DBHOST as env. var in ```deploy-infrastructure.sh```
+- Build unix alias for DB connection in ```deploy-infrastructure.sh```
+
 # pegaso-infrastructure
 Terraform templates for database and app hosts
 
@@ -49,7 +54,37 @@ Ansible installation on Ubuntu:
 sudo apt-get install ansible
 ```
 
+# Environment requirements
+
+The Terraform templates use environment variables to retrieve provider keys. They can be defined as follows if root ```sudo su root``` (example):
+
+```bash
+echo 'TF_VAR_my_secret_key="e11414AIb12mvVDasdf5adsW27pasdfPYoasI0dPFgOdFGa2JCJ7"' >> /etc/environment
+echo 'TF_VAR_my_public_key="AKNOFASD37RASD43L4N"' >> /etc/environment
+```
+
+It also uses the following UNIX environment variables that should be defined in the ```.profile``` of the user deploying the infrastructure:
+
+```bash
+$cat ~/.profile
+...
+export PEGASO_INFRA_DIR='<<local path to this repository>>'
+export SSH_KEYS_DIR='<<path to local folder including ssh key pairs used by EC2 instances>>'
+export SSH_KEY_APPLCTN='<<the name of the key pair used by the app EC2 instance>>'
+export SSH_KEY_DATABAS='<<the name of the key pair used by the app EC2 instance>>'
+ 
+alias deploy_infrastructure="$PEGASO_INFRA_DIR/Utilities/bash-scripts/deploy-infrastructure.sh"
+alias ssh_app="$PEGASO_INFRA_DIR/Utilities/bash-scripts/ssh-app.sh"
+alias ssh_database="$PEGASO_INFRA_DIR/Utilities/bash-scripts/ssh-database.sh"
+...
+```
+
 # Deployment
+
+Infrastructure deployment can be achieved with:
+```sh
+$ deploy_infrastructure
+```
 
 Once in the repository folder, Terraform is started with:
 
@@ -87,15 +122,6 @@ Destruction:
 terraform destroy -auto-approve
 ```
 
-
-# Environment requirements
-
-The Terraform templates use environment variables to retrieve provider keys. They can be defined as follows if root (```sudo su root```):
-
-```bash
-echo 'TF_VAR_my_secret_key="e11414AIb12mvVDasdf5adsW27pasdfPYoasI0dPFgOdFGa2JCJ7"' >> /etc/environment
-echo 'TF_VAR_my_public_key="AKNOFASD37RASD43L4N"' >> /etc/environment
-```
 
 ## Utilities
 

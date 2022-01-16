@@ -146,3 +146,13 @@ resource "aws_security_group_rule" "tcp_3306_from_vanilla_to_database_ec2" {
   
   security_group_id = aws_security_group.database_ec2.id
 }
+
+resource "aws_security_group_rule" "tcp_3306_from_laptop_to_database_ec2" {
+  type = "ingress"
+  from_port = 3306
+  to_port = 3306
+  protocol = "tcp"
+  cidr_blocks = [var.adminIP]
+  
+  security_group_id = aws_security_group.database_ec2.id
+}

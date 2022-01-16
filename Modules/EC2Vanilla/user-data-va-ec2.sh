@@ -52,6 +52,10 @@ sudo echo 'echo " ""The instance public IP address is:"' >> $customfile
 sudo echo 'echo "   "' >> $customfile
 sudo echo 'echo "   "$PUBLIC_IP' >> $customfile
 sudo echo 'echo "   "' >> $customfile
+sudo echo 'echo " ""Connect to the remote database as follows:"' >> $customfile
+sudo echo 'echo "   "' >> $customfile
+sudo echo 'echo "   "mysql -u ec2-dbuser -h <<private-DB-IP>> -p<<password>>"' >> $customfile
+sudo echo 'echo "   "' >> $customfile
 sudo echo 'echo " ================================== "' >> $customfile
 sudo echo 'echo " ################################## "' >> $customfile
 sudo echo 'echo " ================================== "' >> $customfile

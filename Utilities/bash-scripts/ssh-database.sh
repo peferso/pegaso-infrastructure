@@ -41,8 +41,6 @@ find_ip () {
     partLeftt=${element%%"${delimiter}"*}
     partRight=${element#*"${delimiter}"}
     partRight=$( echo  "${partRight//['\"\,\[\]']/}"  )
-    #modNames+=( ${partLeftt} );
-    #insPubIP+=( ${partRight} );
     if [[ ${partLeftt} == *"PublicIP"* ]] && [[ ${partLeftt} == *"${ec2_type}"* ]]; 
     then
       publicIP=${partRight}

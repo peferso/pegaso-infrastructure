@@ -56,6 +56,7 @@ find_ips () {
 }
 
 add_each_instance_in_1_group() {
+  echo "# Update of Ansible host files: ${DTSTAMP}"> ${HOSTSFILE}
   numIPs=$(echo "${#insPubIP[@]}")
   ii="0"
   for i in "${insPubIP[@]}" 
