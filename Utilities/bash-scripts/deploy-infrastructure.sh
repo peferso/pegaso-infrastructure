@@ -91,6 +91,32 @@ invoke_post_creation_tasks() {
   echo
 }
 
+find_and_export_db_ip () { 
+  cd ${MAINDIR} 
+  outputList="$(terraform output)" 
+  outputList=${outputList//' = '/'='} 
+  outputList=$(echo "$outputList" | tr '\n' ' ') 
+  outputList=${outputList//[' "']/} 
+  outputList=(${outputList//']'/'] '}) 
+  delimiter="=" 
+  modNames=(); 
+  insPubIP=(); 
+  for element in "${outputList[@]}" 
+  do 
+    partLeftt=${element%%"${delimiter}"*} 
+    partRight=${element#*"${delimiter}"} 
+    partRight=$( echo  "${partRight//['\"\,\[\]']/}"  ) 
+    if [[ ${partLeftt} == *"PublicIP"* ]] && [[ ${partLeftt} == *"${ec2_type}"* ]];  
+    then 
+      publicIP=${partRight} 
+    fi 
+  done 
+  cd - > /dev/null  
+  lineNumber=$(grep -n 'DBHOST' ~/.profile)
+  lineNumber=$(echo ${lineNumber%%':'*})
+  sed -i "${lineNumber}s+.*+DBHOST=${publicIP}+" ~/.profile
+  source ~/.profile
+} 
 
 # Main
 
@@ -105,4 +131,7 @@ invoke_terraform_apply
 invoke_update_ansible_inventory
 
 invoke_post_creation_tasks
+
+find_and_export_db_ip
+
 

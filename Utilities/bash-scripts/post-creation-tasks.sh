@@ -1,7 +1,9 @@
 #!/bin/bash
 
+source ~/.profile
+
 MAINDIR=$PEGASO_INFRA_DIR
-PLAYBOOKSDIR=$MAINDIR"/Utilities/ansible-playbooks"
+PLAYBOOKSDIR=$MAINDIR/Utilities/ansible-playbooks
 DBSETUP="db-server-setup.yml"
 DBANSCONFIGFILE="db-server-setup.cfg"
 CFGVAR="ANSIBLE_CONFIG"
@@ -36,7 +38,7 @@ run_ansible_playbook() {
   # ========================================================
   "
   echo "${MSSGPLBK}"
-  ansible-playbook -vvv ${PLAYBOOKSDIR}/${1}
+  ansible-playbook -vvv ${PLAYBOOKSDIR}/${1} --extra-vars "db_user=$DBUSER db_pass=$DBPASS mysqlrootpasswd=$DBPASS"
 }
 
 # Main

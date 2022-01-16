@@ -5,12 +5,11 @@
   become: yes
   remote_user: ec2-user
   vars:
-      db_name: "db1"
-      db_user: "ec2-dbuser"
-      db_pass: "Perr0_Pat0"
+      #db_user: "ec2-dbuser"
+      #db_pass: "Perr0_Pat0"
       db_uhst: "%"
       mysqlinitpasswd: "tobeoverriden"
-      mysqlrootpasswd: "Perr0_Pat0"
+      #mysqlrootpasswd: "Perr0_Pat0"
 
   tasks:
 
