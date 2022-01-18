@@ -130,9 +130,20 @@ invoke_terraform_apply
 
 invoke_update_ansible_inventory
 
-#sleep 120
+start_time="$(date -u +%s)"
+waittime=120
+while true
+do
+  end_time="$(date -u +%s)"
+  elapsed="$(($end_time-$start_time))"
+  echo -ne 'Waiting '$waittime' seconds for instances to deploy: '$elapsed' seconds elapsed                         \r'
+  if [ $elapsed -ge $waittime ];
+  then
+    break 
+  fi
+done
 
-#invoke_post_creation_tasks
+invoke_post_creation_tasks
 
 find_and_export_db_ip
 
