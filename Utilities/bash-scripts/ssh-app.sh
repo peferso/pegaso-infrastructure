@@ -46,20 +46,20 @@ find_ip () {
     if [[ ${partLeftt} == *"PublicIP"* ]] && [[ ${partLeftt} == *"${ec2_type}"* ]]; 
     then
       publicIP=${partRight}
-      echo -ne 'Accessing '${ec2_type}' through ssh... |######    | - IP '${publicIP}' was found                        \r'; sleep 2
+      echo -ne 'Accessing '${ec2_type}' through ssh... |######    | - IP '${publicIP}' was found                        \r'; sleep 1
     fi
   done
   cd - > /dev/null 
 }
 
-echo -ne 'Accessing '${ec2_type}' through ssh... |          | - Starting...                                                  \r'; sleep 2
+echo -ne 'Accessing '${ec2_type}' through ssh... |          | - Starting...                                                  \r'; sleep 1
 
 confirm $1
 
-echo -ne 'Accessing '${ec2_type}' through ssh... |###       | - Finding the public IP of the EC2 instance...                 \r'; sleep 2
+echo -ne 'Accessing '${ec2_type}' through ssh... |###       | - Finding the public IP of the EC2 instance...                 \r'; sleep 1
 
 find_ip
 
-echo -ne 'Accessing '${ec2_type}' through ssh... |######### | - Invoking ssh using key pair...                               \r\r'; sleep 2; clear
+echo -ne 'Accessing '${ec2_type}' through ssh... |######### | - Invoking ssh using key pair...                               \r\r'; sleep 1; clear
 
 ssh -i ${SSH_KEYS_DIR}/${SSH_KEY_APPLCTN} ec2-user@${publicIP}

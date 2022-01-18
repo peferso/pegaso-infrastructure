@@ -58,7 +58,7 @@ invoke_terraform_apply() {
   echo [$(date -u)] 
   echo "${MSSGENV}"
   cd $MAINDIR
-  terraform apply
+  terraform apply -auto-approve
   cd - > /dev/null
   echo
 }
@@ -114,7 +114,7 @@ find_and_export_db_ip () {
   cd - > /dev/null  
   lineNumber=$(grep -n 'DBHOST' ~/.profile)
   lineNumber=$(echo ${lineNumber%%':'*})
-  sed -i "${lineNumber}s+.*+DBHOST=${publicIP}+" ~/.profile
+  sed -i "${lineNumber}s+.*+export DBHOST=${publicIP}+" ~/.profile
   source ~/.profile
 } 
 
@@ -130,7 +130,9 @@ invoke_terraform_apply
 
 invoke_update_ansible_inventory
 
-invoke_post_creation_tasks
+#sleep 120
+
+#invoke_post_creation_tasks
 
 find_and_export_db_ip
 
