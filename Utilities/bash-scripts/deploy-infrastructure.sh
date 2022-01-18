@@ -99,6 +99,7 @@ find_and_export_db_ip () {
   outputList=${outputList//[' "']/} 
   outputList=(${outputList//']'/'] '}) 
   delimiter="=" 
+  ec2_type="EC2Database"
   modNames=(); 
   insPubIP=(); 
   for element in "${outputList[@]}" 
@@ -112,10 +113,7 @@ find_and_export_db_ip () {
     fi 
   done 
   cd - > /dev/null  
-  lineNumber=$(grep -n 'DBHOST' ~/.profile)
-  lineNumber=$(echo ${lineNumber%%':'*})
-  sed -i "${lineNumber}s+.*+export DBHOST=${publicIP}+" ~/.profile
-  source ~/.profile
+  sed -i "s+export DBHOST=.*+export DBHOST=${publicIP}+" ~/.profile
 } 
 
 # Main
@@ -140,6 +138,7 @@ do
   if [ $elapsed -ge $waittime ];
   then
     break 
+    echo
   fi
 done
 
@@ -147,4 +146,5 @@ invoke_post_creation_tasks
 
 find_and_export_db_ip
 
+source ~/.profile
 

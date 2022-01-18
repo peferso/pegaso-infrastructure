@@ -17,11 +17,15 @@
     shell:
       cmd: sudo rpm -Uvh https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
     register: rpmmysql
-    failed_when: '"Error" in rpmmysql.stderr'    
+    failed_when: '"Error" in rpmmysql.stderr'
+    
+  - name: "Adding new GPG Keys"
+    shell: 
+      cmd: rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
 
-  - name: "Removing GPG key checks"
-    shell:
-      cmd: sudo sed -i "s+gpgcheck=.*+gpgcheck=0+" /etc/yum.repos.d/mysql*
+  # - name: "Removing GPG key checks"
+  #   shell:
+  #     cmd: sudo sed -i "s+gpgcheck=.*+gpgcheck=0+" /etc/yum.repos.d/mysql*
 
   - name: "Install mySQL server"
     shell:

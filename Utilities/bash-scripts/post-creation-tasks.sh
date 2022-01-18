@@ -38,7 +38,8 @@ run_ansible_playbook() {
   # ========================================================
   "
   echo "${MSSGPLBK}"
-  ansible-playbook -vvv ${PLAYBOOKSDIR}/${1} --extra-vars "db_user=$DBUSER db_pass=$DBPASS mysqlrootpasswd=$DBPASS"
+  #ansible-playbook -vvv ${PLAYBOOKSDIR}/${1} --extra-vars "db_user=$DBUSER db_pass=$DBPASS mysqlrootpasswd=$DBPASS"
+  ansible-playbook ${PLAYBOOKSDIR}/${1} --extra-vars "db_user=$DBUSER db_pass=$DBPASS mysqlrootpasswd=$DBPASS"
 }
 
 # Main
