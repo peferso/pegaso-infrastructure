@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ~/.profile
+source ~/.profile_PEGASO
 
 MAINDIR=$PEGASO_INFRA_DIR
 PLAYBOOKSDIR=$MAINDIR/Utilities/ansible-playbooks

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /home/pietari/.profile
+source /home/pietari/.profile_PEGASO
 
 MAINDIR=$PEGASO_INFRA_DIR
 HOSTSFILE="/etc/ansible/hosts"
