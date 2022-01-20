@@ -1,6 +1,9 @@
 CREATE DATABASE IF NOT EXISTS pegaso_db;
+
 USE pegaso_db;
+
 DROP TABLE IF EXISTS raw_data;
+
 CREATE TABLE
 raw_data (
 id VARCHAR(60),
