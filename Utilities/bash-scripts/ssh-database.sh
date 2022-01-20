@@ -27,6 +27,8 @@ ec2_type='EC2Database'
 
 find_ip () {
   cd ${MAINDIR}
+  echo -ne 'Accessing '${ec2_type}' through ssh... |####      | - Refreshing terraform state                        \r'; sleep 1
+  terraform refresh > /dev/null
   outputList="$(terraform output)"
   outputList=${outputList//' = '/'='}
   outputList=$(echo "$outputList" | tr '\n' ' ')
@@ -53,7 +55,7 @@ echo -ne 'Accessing '${ec2_type}' through ssh... |          | - Starting...     
 
 confirm $1
 
-echo -ne 'Accessing '${ec2_type}' through ssh... |###       | - Finding the public IP of the EC2 instance...                 \r'; sleep 1
+echo -ne 'Accessing '${ec2_type}' through ssh... |##        | - Finding the public IP of the EC2 instance...                 \r'; sleep 1
 
 find_ip
 

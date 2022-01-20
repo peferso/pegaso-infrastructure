@@ -15,7 +15,6 @@ INITMSSG="
 # ========================================================
 "
 
-
 confirm() {
   if [ "$1" != "-a" ]
   then
@@ -28,6 +27,8 @@ ec2_type='EC2Vanilla'
 
 find_ip () {
   cd ${MAINDIR}
+  echo -ne 'Accessing '${ec2_type}' through ssh... |####      | - Refreshing terraform state                        \r'; sleep 1
+  terraform refresh > /dev/null
   outputList="$(terraform output)"
   outputList=${outputList//' = '/'='}
   outputList=$(echo "$outputList" | tr '\n' ' ')
@@ -41,8 +42,6 @@ find_ip () {
     partLeftt=${element%%"${delimiter}"*}
     partRight=${element#*"${delimiter}"}
     partRight=$( echo  "${partRight//['\"\,\[\]']/}"  )
-    #modNames+=( ${partLeftt} );
-    #insPubIP+=( ${partRight} );
     if [[ ${partLeftt} == *"PublicIP"* ]] && [[ ${partLeftt} == *"${ec2_type}"* ]]; 
     then
       publicIP=${partRight}
@@ -56,7 +55,7 @@ echo -ne 'Accessing '${ec2_type}' through ssh... |          | - Starting...     
 
 confirm $1
 
-echo -ne 'Accessing '${ec2_type}' through ssh... |###       | - Finding the public IP of the EC2 instance...                 \r'; sleep 1
+echo -ne 'Accessing '${ec2_type}' through ssh... |##        | - Finding the public IP of the EC2 instance...                 \r'; sleep 1
 
 find_ip
 

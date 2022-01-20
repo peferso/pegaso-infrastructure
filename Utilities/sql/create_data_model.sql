@@ -15,5 +15,6 @@ professional_vendor VARCHAR(5),
 automatic_gearbox VARCHAR(5),
 year YEAR,
 source VARCHAR(60),
+hash VARCHAR(64),
 batch_ts DATE
 );
