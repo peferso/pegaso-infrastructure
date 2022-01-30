@@ -119,7 +119,7 @@ done
 
 invoke_post_creation_tasks
 
-$MAINDIR/Utilities/bash/find_and_export_db_ip.sh
+$MAINDIR/Utilities/bash-scripts/find-and-export-db-ip.sh
 
 source ~/.profile_PEGASO
 

@@ -18,5 +18,5 @@ variable "vpcID" {
 variable "adminIP" {
   type        = string
   description = "IP address from which we connect to the EC2 instances using ssh"
-  default     = "81.172.108.214/32"
+  default     = "2.155.74.105/32"
 }
