@@ -121,7 +121,11 @@ invoke_post_creation_tasks
 
 $MAINDIR/Utilities/bash-scripts/find-and-export-db-ip.sh
 
+shopt -s expand_aliases
+
 source ~/.profile_PEGASO
 
 connect_to_database < $MAINDIR/Utilities/sql/create_data_model.sql
+
+connect_to_database < $MAINDIR/Utilities/sql/create_procedure_remove_rptd_itms.sql
 
