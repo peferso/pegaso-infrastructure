@@ -125,7 +125,7 @@ shopt -s expand_aliases
 
 source ~/.profile_PEGASO
 
-connect_to_database < $MAINDIR/Utilities/sql/create_data_model.sql
+#connect_to_database < $MAINDIR/Utilities/sql/create_data_model.sql
 
-connect_to_database < $MAINDIR/Utilities/sql/create_procedure_remove_rptd_itms.sql
+#connect_to_database < $MAINDIR/Utilities/sql/create_procedure_remove_rptd_itms.sql
 
