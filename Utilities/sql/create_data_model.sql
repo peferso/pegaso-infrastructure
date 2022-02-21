@@ -87,3 +87,10 @@ ORDER BY
 LIMIT 0,10;
 
 
+CREATE OR REPLACE VIEW brands_count
+AS
+SELECT 
+  DISTINCT brand,
+  COUNT(id) OVER (PARTITION BY brand) AS num_cars
+FROM
+  raw_data;

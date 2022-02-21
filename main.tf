@@ -38,3 +38,7 @@ module "EC2Vanilla" {
   secGrpID = module.SecurityGroups.clientEC2SecGrID
   environmentName = var.environmentName
 }
+
+module "roles" {
+  source = "./Modules/IAM"
+}
