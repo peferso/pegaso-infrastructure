@@ -40,6 +40,6 @@ resource "aws_instance" "vanilla_ec2" {
     Name = join("-", [var.environmentName, count.index, "vanilla_ec2"])
     Agent = "Jenkins"
     Terraform = "TRUE"
-    Role = "Client"
+    Role = "App"
   }
 }

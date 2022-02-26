@@ -1,3 +1,10 @@
+
+data "aws_caller_identity" "current" {}
+
+locals {
+    account_id = data.aws_caller_identity.current.account_id
+}
+
 resource "aws_iam_role" "ec2_manager" {
   name = "ec2_manager"
 
@@ -11,9 +18,8 @@ resource "aws_iam_role" "ec2_manager" {
       "Sid": "",
       "Effect": "Allow",
       "Principal": {
-        "Service": [
-          "ec2.amazonaws.com"
-        ]
+        "AWS": "arn:aws:iam::${local.account_id}:user/ec2Manager",
+        "Service": "ec2.amazonaws.com"
       },
       "Action": "sts:AssumeRole"
     }
@@ -38,7 +44,7 @@ resource "aws_iam_role_policy" "ec2_manager" {
             "Resource": "arn:aws:ec2:*:*:instance/*",
             "Condition": {
                 "StringEquals": {
-                    "aws:ResourceTag/Role": "Database"
+                    "aws:ResourceTag/Terraform": "TRUE"
                 }
             }
         },
@@ -51,6 +57,7 @@ resource "aws_iam_role_policy" "ec2_manager" {
 }
 EOF
 }
+
 
 
 

@@ -33,6 +33,8 @@ BEGIN
           hash 
         IN (
             SELECT DISTINCT rdh.hash FROM raw_data rdh 
+            WHERE
+              rdh.batch_ts = aDate
             GROUP BY 
               rdh.hash
             HAVING

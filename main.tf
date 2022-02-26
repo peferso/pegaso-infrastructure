@@ -33,7 +33,7 @@ module "EC2Database" {
   
 module "EC2Vanilla" {
   source = "./Modules/EC2Vanilla"
-  number_of_environments = var.number_of_environments
+  number_of_environments = 1
   ec2SubNt = var.my_subnet_1
   secGrpID = module.SecurityGroups.clientEC2SecGrID
   environmentName = var.environmentName
