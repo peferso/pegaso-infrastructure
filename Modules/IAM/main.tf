@@ -7,9 +7,6 @@ locals {
 
 resource "aws_iam_role" "ec2_manager" {
   name = "ec2_manager"
-
-  # Terraform's "jsonencode" function converts a
-  # Terraform expression result to valid JSON syntax.
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -52,12 +49,68 @@ resource "aws_iam_role_policy" "ec2_manager" {
             "Effect": "Allow",
             "Action": "ec2:DescribeInstances",
             "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "events:PutEvents",
+            "Resource": "${var.ec2_event_bus_arn}"
         }
     ]
 }
 EOF
 }
 
+resource "aws_iam_role" "s3_rw_access" {
+  name = "s3_rw_access"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::${local.account_id}:user/ec2Manager",
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
 
+resource "aws_iam_role_policy" "s3_rw_access" {
+    name     = "S3EC2access"
+    role     = aws_iam_role.s3_rw_access.id
+    policy   = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["s3:ListBucket"],
+      "Resource": ["${var.bucket_arn}"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:GetObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": ["${var.bucket_arn}/*"]
+    }
+  ]
+}
+EOF
+}
 
+resource "aws_iam_instance_profile" "ec2_profile" {
+  name = "ec2_profile"
+  role = aws_iam_role.s3_rw_access.name
+}
 
+output "iam_ec2_profile_name" {
+  value = aws_iam_instance_profile.ec2_profile.name
+}

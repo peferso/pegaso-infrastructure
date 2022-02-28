@@ -64,3 +64,7 @@ variable "number_of_environments" {
   description = "The number of EC2 instances to be created"
   default     = 1
 }
+
+variable "iam_ec2_profile_name" {
+  type = string
+}

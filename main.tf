@@ -8,7 +8,8 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 2.70"
+      #version = "~> 2.70"
+      version = "~> 4.2.0"
     }
   }
 }
@@ -37,8 +38,20 @@ module "EC2Vanilla" {
   ec2SubNt = var.my_subnet_1
   secGrpID = module.SecurityGroups.clientEC2SecGrID
   environmentName = var.environmentName
+  iam_ec2_profile_name = module.roles.iam_ec2_profile_name
 }
 
 module "roles" {
   source = "./Modules/IAM"
+  ec2_event_bus_arn = module.events.ec2_manager_bus_arn
+  bucket_arn = module.s3_bucket.bucket_arn
 }
+
+module "events" {
+  source = "./Modules/Events"
+}
+
+module "s3_bucket" {
+  source = "./Modules/S3"
+}
+

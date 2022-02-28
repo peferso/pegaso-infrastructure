@@ -35,10 +35,11 @@ resource "aws_instance" "vanilla_ec2" {
   associate_public_ip_address =  var.publicIP
   user_data                   =  file(var.pathToUD)
   key_name                    =  var.keyName
+  iam_instance_profile        =  var.iam_ec2_profile_name
   tags = {
     Environment = join("-", [var.environmentName, count.index])
     Name = join("-", [var.environmentName, count.index, "vanilla_ec2"])
-    Agent = "Jenkins"
+    Agent = "user-data"
     Terraform = "TRUE"
     Role = "App"
   }

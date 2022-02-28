@@ -14,6 +14,8 @@ echo -ne 'Finding '${ec2_type}' public IP... |#   | - Using AWS CLI \r'; sleep 1
 
   publicIP=$(get_db_ip)
 
+  publicIP=${publicIP//\"/}
+
  # 
   #terraform refresh
 #
