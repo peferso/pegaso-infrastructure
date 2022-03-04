@@ -1,5 +1,9 @@
 #!/bin/bash
 
+shopt -s expand_aliases
+
+source ~/.profile_PEGASO
+
 MAINDIR=$PEGASO_INFRA_DIR
 DTSTAMP=$( echo "$(date +'%Y%m%d-%H_%M_%S_%3N')" )
 INITMSSG="
@@ -51,14 +55,18 @@ find_ip () {
   cd - > /dev/null 
 }
 
-echo -ne 'Accessing '${ec2_type}' through ssh... |          | - Starting...                                                  \r'; sleep 1
+# echo -ne 'Accessing '${ec2_type}' through ssh... |          | - Starting...                                                  \r'; sleep 1
 
 confirm $1
 
-echo -ne 'Accessing '${ec2_type}' through ssh... |##        | - Finding the public IP of the EC2 instance...                 \r'; sleep 1
+# echo -ne 'Accessing '${ec2_type}' through ssh... |##        | - Finding the public IP of the EC2 instance...                 \r'; sleep 1
 
-find_ip
+# find_ip
 
-echo -ne 'Accessing '${ec2_type}' through ssh... |######### | - Invoking ssh using key pair...                               \r\r'; sleep 1; clear
+publicIP=$(get_db_ip)
 
-ssh -i ${SSH_KEYS_DIR}/${SSH_KEY_APPLCTN} ec2-user@${publicIP}
+publicIP=${publicIP//\"/}
+
+# echo -ne 'Accessing '${ec2_type}' through ssh... |######### | - Invoking ssh using key pair...                               \r\r'; sleep 1; clear
+
+ssh -i ${SSH_KEYS_DIR}/${SSH_KEY_APPLCTN} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ec2-user@${publicIP}
