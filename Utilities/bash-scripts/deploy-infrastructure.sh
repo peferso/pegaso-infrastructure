@@ -58,7 +58,8 @@ invoke_terraform_apply() {
   echo [$(date -u)] 
   echo "${MSSGENV}"
   cd $MAINDIR
-  terraform apply -auto-approve
+  #terraform apply -auto-approve
+  terraform apply 
   cd - > /dev/null
   echo
 }
@@ -92,6 +93,13 @@ invoke_post_creation_tasks() {
 }
 
 # Main
+
+shopt -s expand_aliases
+
+source ~/.profile_PEGASO
+
+start_db
+start_ap
 
 get_current_public_ip
 
