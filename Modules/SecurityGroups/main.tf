@@ -156,3 +156,38 @@ resource "aws_security_group_rule" "tcp_3306_from_laptop_to_database_ec2" {
   
   security_group_id = aws_security_group.database_ec2.id
 }
+
+# Rule to allow traffic through Jenkins Port
+
+resource "aws_security_group_rule" "jenkins_access_vanilla_in" {
+  type = "ingress"
+  from_port = 8080
+  to_port = 8080
+  protocol = "tcp"
+  cidr_blocks = [var.adminIP]
+  
+  security_group_id = aws_security_group.vanilla_ec2.id
+}
+
+resource "aws_security_group_rule" "jenkins_access_vanilla_out" {
+  type = "egress"
+  from_port = 8080
+  to_port = 8080
+  protocol = "tcp"
+  cidr_blocks = [var.adminIP]
+  
+  security_group_id = aws_security_group.vanilla_ec2.id
+}
+
+
+# Rule to allow traffic through website Port
+
+resource "aws_security_group_rule" "website_access_vanilla_in" {
+  type = "ingress"
+  from_port = 8001
+  to_port =  8001
+  protocol = "tcp"
+  cidr_blocks = [var.adminIP]
+  
+  security_group_id = aws_security_group.vanilla_ec2.id
+}

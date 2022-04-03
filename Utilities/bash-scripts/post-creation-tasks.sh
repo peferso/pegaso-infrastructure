@@ -5,7 +5,9 @@ source ~/.profile_PEGASO
 MAINDIR=$PEGASO_INFRA_DIR
 PLAYBOOKSDIR=$MAINDIR/Utilities/ansible-playbooks
 DBSETUP="db-server-setup.yml"
+APSETUP="ap-server-setup.yml"
 DBANSCONFIGFILE="db-server-setup.cfg"
+APANSCONFIGFILE="ap-server-setup.cfg"
 CFGVAR="ANSIBLE_CONFIG"
 
 create_environment_variable_ansiblecfg_dir() {
@@ -38,14 +40,16 @@ run_ansible_playbook() {
   # ========================================================
   "
   echo "${MSSGPLBK}"
-  #ansible-playbook -vvv ${PLAYBOOKSDIR}/${1} --extra-vars "db_user=$DBUSER db_pass=$DBPASS mysqlrootpasswd=$DBPASS"
-  ansible-playbook ${PLAYBOOKSDIR}/${1} --extra-vars "db_user=$DBUSER db_pass=$DBPASS mysqlrootpasswd=$DBPASS"
+  ansible-playbook -vvv ${PLAYBOOKSDIR}/${1} --extra-vars "db_user=$DBUSER db_pass=$DBPASS mysqlrootpasswd=$DBPASS"
+  #ansible-playbook ${PLAYBOOKSDIR}/${1} --extra-vars "db_user=$DBUSER db_pass=$DBPASS mysqlrootpasswd=$DBPASS"
 }
 
 # Main
 
 create_environment_variable_ansiblecfg_dir "${DBANSCONFIGFILE}"
 
-run_ansible_playbook "${DBSETUP}"
+#run_ansible_playbook "${DBSETUP}"
+
+run_ansible_playbook "${APSETUP}"
 
 delete_environment_variable_ansiblecfg_dir 

@@ -1,0 +1,99 @@
+---
+
+- name: configure application server
+  hosts: EC2Vanilla
+  become: yes
+  remote_user: ec2-user
+  vars:
+      #mysqlrootpasswd: "Some_value"
+
+  tasks:
+
+  - name: "Adding Jenkins repository"
+    shell:
+      cmd: sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat/jenkins.repo
+    register: rpmjenkinsrepo
+    failed_when: '"Error" in rpmjenkinsrepo.stderr'
+   
+  - name: "Importing Jenkins repository key"
+    shell:
+      cmd: sudo rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key
+    register: rpmjenkinskey
+    failed_when: '"Error" in rpmjenkinskey.stderr'
+  
+
+  - name: "Installing Java 11"
+    shell:
+      cmd: sudo sudo amazon-linux-extras install java-openjdk11 -y
+    register: javainstall
+    failed_when: '"Error" in javainstall.stderr'
+
+  - name: "Installing Jenkins"
+    shell:
+      cmd: sudo yum install jenkins -y
+    register: rpmjenkinsinstall
+    failed_when: '"Error" in rpmjenkinsinstall.stderr'
+
+  - name: "Start Jenkins"
+    shell:
+      cmd: sudo service jenkins start
+
+  - name: "Enable Jenkins start when system is started"
+    shell:
+      cmd: sudo systemctl enable jenkins
+
+  - name: "Install Python 3.7: updating system 1" 
+    shell: 
+      cmd: sudo yum -y update
+
+  - name: "Install Python 3.7: updating system 2"
+    shell: 
+      cmd: sudo yum -y groupinstall "Development Tools"
+
+  - name: "Install Python 3.7: updating system 3"
+    shell:
+      cmd: sudo yum -y install openssl-devel bzip2-devel libffi-devel
+  
+  - name: "Install Python 3.7: updating system 4"
+    shell:
+      cmd: sudo yum -y install wget
+
+  - name: "Install Python 3.7: getting source binaries"
+    shell:
+      cmd: wget https://www.python.org/ftp/python/3.7.6/Python-3.7.6.tgz
+
+  - name: "Install Python 3.7: extract binaries"
+    shell:
+      cmd: tar xvf Python-3.7.6.tgz 
+
+  - name: "Install Python 3.7: setup installation"
+    shell: 
+      cmd: cd Python-3.7.6; ./configure --enable-optimizations; sudo make altinstall
+
+#  - name: "Install Python 3.7: install"
+#    shell:
+#      cmd: sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.7 1
+
+  - name: "Install pip: 1"
+    shell:
+      cmd: curl -O https://bootstrap.pypa.io/get-pip.py
+
+  - name: "Install pip: 2"
+    shell:
+      cmd: python3 get-pip.py --user
+
+# TODO:
+# Add checks to verify if there is python 3.7 installed before steps Install Python 3.7.
+
+  - name: "Install nginx: 1"
+    shell:
+      cmd: sudo amazon-linux-extras enable nginx1
+
+  - name: "Install nginx: 2"
+    shell:
+      cmd: sudo yum clean metadata
+
+  - name: "Install nginx: 3"
+    shell:
+      cmd: $ sudo yum -y install nginx
+  
