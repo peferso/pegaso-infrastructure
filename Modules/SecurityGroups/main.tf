@@ -187,7 +187,7 @@ resource "aws_security_group_rule" "website_access_vanilla_in" {
   from_port = 8001
   to_port =  8001
   protocol = "tcp"
-  cidr_blocks = [var.adminIP]
+  cidr_blocks = ["0.0.0.0/0"] #[var.adminIP]
   
   security_group_id = aws_security_group.vanilla_ec2.id
 }

@@ -33,7 +33,7 @@ variable "amiType" {
 variable "insType" {
   type        = string
   description = "The type of hardware of the EC2 instance (default is t2.micro which is <<free>>)"
-  default     = "t2.micro"
+  default     = "t2.large"
 }
 
 variable "pathToUD" {

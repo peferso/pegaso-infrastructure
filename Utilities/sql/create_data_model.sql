@@ -24,6 +24,14 @@ hash VARCHAR(64),
 batch_ts DATE
 );
 
+CREATE TABLE 
+predicted_prices_random_forest (
+id VARCHAR(60) PRIMARY KEY,
+price MEDIUMINT,
+price_pred MEDIUMINT,
+price_pred_if_new MEDIUMINT,
+batch_ts DATE
+);
 
 CREATE OR REPLACE VIEW batch_dates_variables
 AS
