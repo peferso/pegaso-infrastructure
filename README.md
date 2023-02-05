@@ -68,7 +68,7 @@ export PATH=$PATH:/home/pietari/chromedriver/chromedriver
 
 # pegaso project environment variables
 export hostIP=`hostname -I`
-export URL='https://www.milanuncios.com/coches-de-segunda-mano/?demanda=n&orden=date&fromSearch='
+export URL='<<url>>'
 export PEGASO_COLLT_DIR='<<local path to this repository>>'
 export PEGASO_INFRA_DIR='<<local path to this repository>>'
 export PEGASO_WEBST_DIR='<<local path to this repository>>'
